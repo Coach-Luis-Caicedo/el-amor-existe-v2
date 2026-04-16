@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Blog — El Amor Existe · Luis Caicedo Sevillano</title>
+<meta name="description" id="pageDesc" content="Reflexiones, filosofía y pensamientos sobre el amor. Blog de Luis Caicedo Sevillano.">
+<meta property="og:title" id="ogTitle" content="Blog — El Amor Existe">
+<meta property="og:description" id="ogDesc" content="Reflexiones sobre el amor, la filosofía y la vida.">
+<meta property="og:image" id="ogImage" content="https://elamorexiste.com/images/og-default.jpg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="El Amor Existe">
+<meta property="og:url" id="ogUrl" content="https://elamorexiste.com/blog">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" id="canonical" href="https://elamorexiste.com/blog">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%235C3D2E'/><text y='.9em' font-size='72' x='50%' text-anchor='middle' dominant-baseline='top'>♥</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── VARIABLES ──────────────────────────────────────────── */
+:root {
+  --cream: #E8DBCA;
+  --cream-light: #F5EDE0;
+  --warm-brown: #5C3D2E;
+  --mid-brown: #8B5E3C;
+  --sand: #B8894A;
+  --sand-light: #E2CBB0;
+  --ink: #1E1209;
+  --text-muted: #5A3F30;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Jost', sans-serif;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream-light); color: var(--ink); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+/* ─── NAV ────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: rgba(250,247,240,0.95); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(140,94,60,0.1);
+}
+.nav-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--warm-brown); font-style: italic; font-weight: 300; text-decoration: none; }
+.nav-links { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+.nav-links a { font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; font-weight: 400; transition: color .25s; }
+.nav-links a:hover, .nav-links a.active { color: var(--warm-brown); }
+.nav-cta { background: var(--warm-brown) !important; color: #FAF7F0 !important; padding: .45rem 1.1rem; border-radius: 2px; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+.hamburger span { display: block; width: 22px; height: 1.5px; background: var(--warm-brown); }
+
+/* ─── LOADING ────────────────────────────────────────────── */
+#pageLoading {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding-top: 65px; gap: 1.2rem;
+}
+.spinner {
+  width: 32px; height: 32px; border: 2px solid var(--sand-light);
+  border-top-color: var(--sand); border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── BLOG LIST ──────────────────────────────────────────── */
+.blog-hero {
+  padding: 8rem 2.5rem 4rem; background: var(--warm-brown); position: relative; overflow: hidden;
+}
+.blog-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(184,137,74,.15) 0%, transparent 70%);
+}
+.blog-hero-inner { max-width: 900px; margin: 0 auto; position: relative; }
+.blog-hero-label { font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; color: var(--sand); margin-bottom: 1rem; font-weight: 500; }
+.blog-hero-title { font-family: var(--serif); font-size: clamp(2.8rem,5vw,4.5rem); font-weight: 300; color: #FAF7F0; line-height: 1.05; margin-bottom: 1rem; }
+.blog-hero-title em { font-style: italic; color: var(--sand-light); }
+.blog-hero-sub { font-size: .97rem; color: rgba(250,247,240,.65); max-width: 520px; line-height: 1.85; }
+
+.filters-bar { background: var(--cream); border-bottom: 1px solid var(--sand-light); padding: 1.2rem 2.5rem; position: sticky; top: 65px; z-index: 100; }
+.filters-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
+.filter-label { font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-muted); margin-right: .4rem; }
+.pill { display: inline-block; padding: .38rem 1rem; border-radius: 20px; border: 1px solid var(--sand-light); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; font-family: var(--sans); background: transparent; transition: all .2s; }
+.pill:hover { border-color: var(--sand); color: var(--warm-brown); }
+.pill.active { background: var(--warm-brown); border-color: var(--warm-brown); color: #FAF7F0; }
+
+.blog-main { max-width: 1100px; margin: 0 auto; padding: 4rem 2.5rem; }
+.posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 1.8rem; }
+
+/* Featured post */
+.featured-post {
+  grid-column: 1/-1; display: grid; grid-template-columns: 1fr 1fr;
+  background: #fff; border: 1px solid var(--sand-light); border-radius: 4px;
+  overflow: hidden; transition: box-shadow .25s; margin-bottom: .5rem;
+}
+.featured-post:hover { box-shadow: 0 8px 40px rgba(92,61,46,.12); }
+.featured-post-img { min-height: 320px; overflow: hidden; background: var(--cream); }
+.featured-post-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.featured-post:hover .featured-post-img img { transform: scale(1.03); }
+.featured-post-img-placeholder {
+  width: 100%; height: 100%; min-height: 320px; display: flex; align-items: center;
+  justify-content: center; background: linear-gradient(135deg,var(--warm-brown),var(--mid-brown));
+  color: rgba(255,255,255,.15); font-family: var(--serif); font-size: 6rem;
+}
+.featured-post-body { padding: 3rem 2.8rem; display: flex; flex-direction: column; justify-content: center; }
+.featured-badge { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--sand); background: rgba(184,137,74,.1); border: 1px solid rgba(184,137,74,.25); display: inline-block; padding: .25rem .7rem; border-radius: 20px; margin-bottom: 1rem; }
+.featured-cat { font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: #C45A00; font-weight: 500; margin-bottom: .7rem; }
+.featured-title { font-family: var(--serif); font-size: clamp(1.6rem,2.5vw,2.2rem); color: var(--warm-brown); margin-bottom: 1rem; font-weight: 400; font-style: italic; line-height: 1.25; }
+.featured-excerpt { font-size: .94rem; color: var(--text-muted); line-height: 1.85; margin-bottom: 1.5rem; }
+.featured-meta { font-size: .72rem; color: var(--sand); margin-bottom: 1.5rem; }
+.btn-read { display: inline-block; background: var(--sand); color: #FAF7F0; padding: .75rem 1.8rem; text-decoration: none; font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 500; border-radius: 2px; transition: background .25s, transform .2s; cursor: pointer; border: none; font-family: var(--sans); }
+.btn-read:hover { background: var(--warm-brown); transform: translateY(-1px); }
+
+/* Post card */
+.post-card { background: #fff; border: 1px solid var(--sand-light); border-radius: 4px; overflow: hidden; transition: box-shadow .25s, transform .2s; display: flex; flex-direction: column; cursor: pointer; }
+.post-card:hover { box-shadow: 0 8px 32px rgba(92,61,46,.12); transform: translateY(-3px); }
+.post-card-img { height: 200px; overflow: hidden; background: var(--cream); position: relative; }
+.post-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.post-card:hover .post-card-img img { transform: scale(1.04); }
+.post-card-img-placeholder {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg,var(--warm-brown),var(--mid-brown));
+  color: rgba(255,255,255,.2); font-family: var(--serif); font-size: 4rem;
+}
+.post-card-body { padding: 1.8rem 1.8rem 1.4rem; flex: 1; display: flex; flex-direction: column; }
+.post-card-cat { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: #C45A00; font-weight: 500; margin-bottom: .6rem; }
+.post-card-title { font-family: var(--serif); font-size: 1.25rem; color: var(--warm-brown); margin-bottom: .7rem; font-weight: 400; font-style: italic; line-height: 1.3; flex: 1; }
+.post-card-excerpt { font-size: .88rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 1.2rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.post-card-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--sand-light); padding-top: 1rem; margin-top: auto; }
+.post-card-meta { font-size: .7rem; color: var(--sand); letter-spacing: .05em; }
+.post-card-link { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--sand); text-decoration: none; font-weight: 500; transition: color .2s; background: none; border: none; cursor: pointer; font-family: var(--sans); }
+.post-card-link:hover { color: var(--warm-brown); }
+
+.posts-empty { grid-column: 1/-1; text-align: center; padding: 5rem 2rem; color: var(--text-muted); }
+.posts-empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: .3; }
+.posts-empty p { font-family: var(--serif); font-style: italic; font-size: 1.2rem; }
+.posts-count { font-size: .78rem; color: var(--text-muted); margin-bottom: 2rem; }
+
+/* ─── POST ARTICLE ───────────────────────────────────────── */
+.post-hero {
+  padding-top: 65px; position: relative; background: var(--warm-brown);
+  min-height: 420px; display: flex; flex-direction: column; justify-content: flex-end;
+}
+.post-hero-img { position: absolute; inset: 0; overflow: hidden; }
+.post-hero-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.45) sepia(30%); }
+.post-hero-noimg { padding-top: 65px; background: var(--warm-brown); padding-bottom: 2.5rem; }
+.post-hero-gradient { position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,18,9,.9) 0%, rgba(30,18,9,.3) 60%, transparent 100%); }
+.post-hero-content { position: relative; z-index: 2; padding: 3rem 2.5rem 2.5rem; max-width: 860px; margin: 0 auto; width: 100%; }
+.post-back { display: inline-flex; align-items: center; gap: .4rem; font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.55); text-decoration: none; margin-bottom: 1.5rem; transition: color .2s; cursor: pointer; background: none; border: none; font-family: var(--sans); }
+.post-back:hover { color: var(--sand); }
+.post-cat { font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--sand); font-weight: 500; margin-bottom: .7rem; }
+.post-title { font-family: var(--serif); font-size: clamp(2rem,4vw,3.5rem); font-weight: 300; color: #FAF7F0; line-height: 1.1; margin-bottom: 1.2rem; font-style: italic; }
+.post-meta { font-size: .75rem; color: rgba(255,255,255,.5); letter-spacing: .06em; display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+
+.post-layout { max-width: 1100px; margin: 0 auto; padding: 4rem 2.5rem; display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start; }
+.post-article { min-width: 0; }
+.post-body { font-size: 1.05rem; color: var(--text-muted); line-height: 1.9; }
+.post-body h2 { font-family: var(--serif); font-size: 1.8rem; color: var(--warm-brown); margin: 2.5rem 0 1rem; font-weight: 400; font-style: italic; }
+.post-body h3 { font-family: var(--serif); font-size: 1.3rem; color: var(--mid-brown); margin: 2rem 0 .8rem; font-weight: 400; }
+.post-body p { margin-bottom: 1.4rem; }
+.post-body em { font-family: var(--serif); font-style: italic; color: var(--warm-brown); font-size: 1.08em; font-weight: 400; }
+.post-body strong { font-weight: 500; color: var(--ink); }
+.post-body blockquote { border-left: 3px solid var(--sand); padding: 1rem 1.5rem; margin: 2rem 0; background: rgba(184,137,74,.06); border-radius: 0 4px 4px 0; }
+.post-body blockquote p { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--warm-brown); margin-bottom: 0; }
+.post-body ul, .post-body ol { padding-left: 1.5rem; margin-bottom: 1.4rem; }
+.post-body li { margin-bottom: .5rem; }
+/* KEY FIX: Images in post body — absolute URL resolution */
+.post-body img { max-width: 100%; border-radius: 4px; margin: 1.5rem 0; display: block; height: auto; }
+.post-body a { color: var(--sand); text-decoration: underline; text-underline-offset: 3px; }
+.post-body hr { border: none; border-top: 1px solid var(--sand-light); margin: 2rem 0; }
+
+/* Share */
+.share-section { margin: 3rem 0; padding: 2rem; background: var(--cream); border: 1px solid var(--sand-light); border-radius: 4px; }
+.share-title { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; font-weight: 500; }
+.share-buttons { display: flex; flex-wrap: wrap; gap: .6rem; }
+.share-btn { display: inline-flex; align-items: center; gap: .45rem; padding: .5rem 1rem; border-radius: 2px; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; font-family: var(--sans); text-decoration: none; cursor: pointer; border: none; transition: opacity .2s, transform .15s; }
+.share-btn:hover { opacity: .85; transform: translateY(-1px); }
+.share-x { background: #000; color: #fff; }
+.share-wa { background: #25D366; color: #fff; }
+.share-fb { background: #1877F2; color: #fff; }
+.share-copy { background: var(--warm-brown); color: #FAF7F0; }
+
+/* Post nav */
+.post-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2.5rem 0; border-top: 1px solid var(--sand-light); padding-top: 2rem; }
+.post-nav-item { padding: 1.2rem 1.5rem; border: 1px solid var(--sand-light); border-radius: 4px; background: none; cursor: pointer; font-family: var(--sans); text-align: left; transition: background .2s, border-color .2s; }
+.post-nav-item:hover { background: var(--cream); border-color: var(--sand); }
+.post-nav-dir { font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--sand); margin-bottom: .4rem; }
+.post-nav-title { font-family: var(--serif); font-size: .95rem; font-style: italic; color: var(--warm-brown); line-height: 1.3; }
+.post-nav-next { text-align: right; }
+
+/* Sidebar */
+.post-sidebar { position: sticky; top: 90px; }
+.sidebar-section { margin-bottom: 2.5rem; }
+.sidebar-title { font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.2rem; padding-bottom: .6rem; border-bottom: 1px solid var(--sand-light); font-weight: 500; }
+.recent-item { display: flex; gap: .8rem; padding: .8rem 0; border-bottom: 1px solid rgba(184,137,74,.12); cursor: pointer; align-items: flex-start; transition: opacity .2s; text-decoration: none; }
+.recent-item:hover { opacity: .75; }
+.recent-item:last-child { border-bottom: none; }
+.recent-item-img { width: 52px; height: 52px; flex-shrink: 0; border-radius: 3px; overflow: hidden; background: var(--cream); }
+.recent-item-img img { width: 100%; height: 100%; object-fit: cover; }
+.recent-item-img-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg,var(--warm-brown),var(--mid-brown)); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.3); font-size: 1.2rem; }
+.recent-item-cat { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--sand); margin-bottom: .25rem; }
+.recent-item-title { font-family: var(--serif); font-size: .9rem; font-style: italic; color: var(--warm-brown); line-height: 1.35; }
+.sidebar-book-cta { background: var(--warm-brown); padding: 1.5rem; border-radius: 4px; text-align: center; }
+.sidebar-book-cta p { color: rgba(250,247,240,.8); font-size: .88rem; line-height: 1.6; margin-bottom: 1rem; }
+.sidebar-cta-btn { display: inline-block; background: var(--sand); color: #FAF7F0; padding: .65rem 1.4rem; text-decoration: none; font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 500; border-radius: 2px; transition: background .2s; }
+.sidebar-cta-btn:hover { background: var(--sand-light); color: var(--warm-brown); }
+
+/* 404 */
+.not-found { min-height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem; }
+.not-found h2 { font-family: var(--serif); font-size: 2rem; color: var(--warm-brown); font-style: italic; margin-bottom: 1rem; }
+.not-found p { color: var(--text-muted); margin-bottom: 2rem; }
+
+/* Fade up animation */
+.fade-up { animation: fadeUp .5s ease both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .featured-post { grid-template-columns: 1fr; }
+  .featured-post-img { min-height: 240px; }
+  .post-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+  .post-sidebar { position: static; }
+}
+@media (max-width: 768px) {
+  nav { padding: .9rem 1.5rem; }
+  .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--cream-light); flex-direction: column; gap: 0; border-bottom: 1px solid var(--sand-light); }
+  .nav-links.open { display: flex; }
+  .nav-links li a { display: block; padding: .8rem 2rem; border-top: 1px solid var(--sand-light); }
+  .hamburger { display: flex; }
+  .blog-hero { padding: 7rem 1.5rem 3rem; }
+  .blog-main { padding: 2.5rem 1.5rem; }
+  .posts-grid { grid-template-columns: 1fr; }
+  .post-hero-content { padding: 2rem 1.5rem 2rem; }
+  .post-layout { padding: 2rem 1.5rem; }
+  .post-nav { grid-template-columns: 1fr; }
+  .filters-bar { padding: 1rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">El Amor Existe</a>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menú" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/#sinopsis">El libro</a></li>
+    <li><a href="/#capitulos">Capítulos</a></li>
+    <li><a href="/#autor">Autor</a></li>
+    <li><a href="/blog" class="active">Blog</a></li>
+    <li><a href="/#comprar" class="nav-cta">Conseguir</a></li>
+  </ul>
+</nav>
+
+<main id="app">
+  <div id="pageLoading">
+    <div class="spinner"></div>
+    <p style="font-size:.8rem;color:var(--text-muted);letter-spacing:.1em">Cargando…</p>
+  </div>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONFIGURACIÓN — Solo cambia estos valores
+═══════════════════════════════════════════════════════════ */
+const CONFIG = {
+  // URL del archivo posts.json en tu repo de GitHub (raw)
+  // Formato: https://raw.githubusercontent.com/USUARIO/REPO/main/posts.json
+  postsUrl: '/posts.json',  // En Cloudflare Pages sirve el archivo directamente
+  siteUrl: 'https://elamorexiste.com',
+  // Directorio base de imágenes (relativo a la raíz del repo)
+  // Las imágenes en posts deben ser rutas absolutas desde la raíz del sitio
+  // Ejemplo: /images/blog/mi-imagen.jpg
+};
+
+/* ═══════════════════════════════════════════════════════════
+   UTILIDADES
+═══════════════════════════════════════════════════════════ */
+function formatDate(d) {
+  if (!d) return '';
+  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const dt = new Date(d + 'T12:00:00');
+  return `${dt.getDate()} de ${months[dt.getMonth()]} de ${dt.getFullYear()}`;
+}
+
+function getSlug() {
+  // Handles: /blog/mi-post  →  'mi-post'
+  const path = window.location.pathname;
+  const parts = path.replace(/\/+$/, '').split('/');
+  // parts = ['', 'blog', 'mi-post']
+  if (parts.length >= 3 && parts[2]) return parts[2];
+  return null;
+}
+
+function navigate(url) {
+  window.history.pushState({}, '', url);
+  route();
+}
+
+function imgUrl(src) {
+  if (!src) return '';
+  // Already absolute URL
+  if (src.startsWith('http://') || src.startsWith('https://')) return src;
+  // Ensure leading slash for root-relative paths
+  return src.startsWith('/') ? src : '/' + src;
+}
+
+// Fix all image src in post body HTML to use absolute root-relative paths
+function fixBodyImages(html) {
+  return html.replace(/(<img[^>]+src=["'])([^"']+)(["'])/gi, (match, pre, src, post) => {
+    return pre + imgUrl(src) + post;
+  });
+}
+
+function updateMeta(title, desc, image, url) {
+  document.getElementById('pageTitle').textContent = title;
+  document.getElementById('pageDesc').setAttribute('content', desc);
+  document.getElementById('ogTitle').setAttribute('content', title);
+  document.getElementById('ogDesc').setAttribute('content', desc);
+  if (image) document.getElementById('ogImage').setAttribute('content', imgUrl(image).startsWith('/') ? CONFIG.siteUrl + imgUrl(image) : imgUrl(image));
+  const fullUrl = url.startsWith('http') ? url : CONFIG.siteUrl + url;
+  document.getElementById('ogUrl').setAttribute('content', fullUrl);
+  document.getElementById('canonical').setAttribute('href', fullUrl);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FETCH POSTS
+═══════════════════════════════════════════════════════════ */
+let _postsCache = null;
+
+async function fetchPosts() {
+  if (_postsCache) return _postsCache;
+  // Try /posts.json first (Cloudflare Pages serves it from repo root)
+  // Add cache-busting only in dev
+  const url = CONFIG.postsUrl;
+  const res = await fetch(url, { cache: 'no-cache' });
+  if (!res.ok) throw new Error(`Cannot load posts (${res.status})`);
+  _postsCache = await res.json();
+  return _postsCache;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BLOG LIST VIEW
+═══════════════════════════════════════════════════════════ */
+async function showBlogList(filterCat = 'all') {
+  updateMeta(
+    'Blog — El Amor Existe · Luis Caicedo Sevillano',
+    'Reflexiones, filosofía y pensamientos sobre el amor.',
+    null,
+    '/blog'
+  );
+
+  let posts;
+  try {
+    posts = await fetchPosts();
+  } catch (e) {
+    document.getElementById('app').innerHTML = renderError(e);
+    return;
+  }
+
+  const published = posts.filter(p => p.published);
+  const categories = ['all', ...new Set(published.map(p => p.category).filter(Boolean))];
+  const filtered = filterCat === 'all' ? published : published.filter(p => p.category === filterCat);
+
+  const featured = filtered.find(p => p.featured) || filtered[0];
+  const rest = featured ? filtered.filter(p => p.id !== featured.id) : filtered;
+
+  document.getElementById('app').innerHTML = `
+    <div class="blog-hero">
+      <div class="blog-hero-inner">
+        <p class="blog-hero-label">Reflexiones · Filosofía · Vida</p>
+        <h1 class="blog-hero-title">El blog de<br><em>Luis Caicedo</em></h1>
+        <p class="blog-hero-sub">Pensamientos sobre el amor, la existencia y todo lo que está en medio.</p>
+      </div>
+    </div>
+
+    <div class="filters-bar">
+      <div class="filters-inner">
+        <span class="filter-label">Temas:</span>
+        ${categories.map(cat => `
+          <button class="pill ${cat === filterCat ? 'active' : ''}" onclick="showBlogList('${cat}')">
+            ${cat === 'all' ? 'Todos' : cat}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="blog-main fade-up">
+      <p class="posts-count">${filtered.length} artículo${filtered.length !== 1 ? 's' : ''}</p>
+      <div class="posts-grid">
+        ${filtered.length === 0 ? `
+          <div class="posts-empty">
+            <div class="posts-empty-icon">♥</div>
+            <p>No hay artículos en esta categoría todavía.</p>
+          </div>
+        ` : `
+          ${featured ? renderFeaturedCard(featured) : ''}
+          ${rest.map(p => renderPostCard(p)).join('')}
+        `}
+      </div>
+    </div>
+  `;
+}
+
+function renderFeaturedCard(p) {
+  const imgHtml = p.image
+    ? `<img src="${imgUrl(p.image)}" alt="${p.title}" loading="lazy">`
+    : `<div class="featured-post-img-placeholder">♥</div>`;
+
+  return `
+    <article class="featured-post" onclick="navigate('/blog/${p.slug || p.id}')">
+      <div class="featured-post-img">${imgHtml}</div>
+      <div class="featured-post-body">
+        <span class="featured-badge">Destacado</span>
+        ${p.category ? `<p class="featured-cat">${p.category}</p>` : ''}
+        <h2 class="featured-title">${p.title}</h2>
+        <p class="featured-excerpt">${p.excerpt || ''}</p>
+        <p class="featured-meta">${formatDate(p.date)}</p>
+        <button class="btn-read" onclick="event.stopPropagation();navigate('/blog/${p.slug || p.id}')">
+          Leer artículo →
+        </button>
+      </div>
+    </article>
+  `;
+}
+
+function renderPostCard(p) {
+  const imgHtml = p.image
+    ? `<img src="${imgUrl(p.image)}" alt="${p.title}" loading="lazy">`
+    : `<div class="post-card-img-placeholder">♥</div>`;
+
+  return `
+    <article class="post-card" onclick="navigate('/blog/${p.slug || p.id}')">
+      <div class="post-card-img">${imgHtml}</div>
+      <div class="post-card-body">
+        ${p.category ? `<p class="post-card-cat">${p.category}</p>` : ''}
+        <h2 class="post-card-title">${p.title}</h2>
+        <p class="post-card-excerpt">${p.excerpt || ''}</p>
+        <div class="post-card-footer">
+          <span class="post-card-meta">${formatDate(p.date)}</span>
+          <button class="post-card-link" onclick="event.stopPropagation();navigate('/blog/${p.slug || p.id}')">
+            Leer →
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   POST VIEW
+═══════════════════════════════════════════════════════════ */
+async function showPost(slug) {
+  let posts, post;
+  try {
+    posts = await fetchPosts();
+    post = posts.find(p => (p.slug === slug || p.id === slug) && p.published);
+    if (!post) { renderNotFound(); return; }
+  } catch (e) {
+    document.getElementById('app').innerHTML = renderError(e);
+    return;
+  }
+
+  // SEO
+  updateMeta(
+    `${post.title} — El Amor Existe`,
+    post.excerpt || '',
+    post.image || null,
+    `/blog/${post.slug || post.id}`
+  );
+
+  const published = posts.filter(p => p.published);
+  const idx = published.findIndex(p => p.id === post.id);
+  const prevPost = idx > 0 ? published[idx - 1] : null;
+  const nextPost = idx < published.length - 1 ? published[idx + 1] : null;
+  const recent = published.filter(p => p.id !== post.id).slice(0, 4);
+
+  const pageUrl = encodeURIComponent(`${CONFIG.siteUrl}/blog/${post.slug || post.id}`);
+  const pageTitle = encodeURIComponent(post.title);
+
+  const heroHtml = post.image ? `
+    <div class="post-hero">
+      <div class="post-hero-img"><img src="${imgUrl(post.image)}" alt="${post.title}"></div>
+      <div class="post-hero-gradient"></div>
+      <div class="post-hero-content">
+        <button class="post-back" onclick="navigate('/blog')">← Volver al blog</button>
+        ${post.category ? `<p class="post-cat">${post.category}</p>` : ''}
+        <h1 class="post-title">${post.title}</h1>
+        <div class="post-meta">
+          <span>Luis Caicedo Sevillano</span>
+          <span>·</span>
+          <span>${formatDate(post.date)}</span>
+        </div>
+      </div>
+    </div>
+  ` : `
+    <div class="post-hero-noimg">
+      <div class="post-hero-content" style="padding-top:3.5rem">
+        <button class="post-back" onclick="navigate('/blog')">← Volver al blog</button>
+        ${post.category ? `<p class="post-cat">${post.category}</p>` : ''}
+        <h1 class="post-title">${post.title}</h1>
+        <div class="post-meta">
+          <span>Luis Caicedo Sevillano</span>
+          <span>·</span>
+          <span>${formatDate(post.date)}</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const recentHtml = recent.length > 0 ? recent.map(p => `
+    <div class="recent-item" onclick="navigate('/blog/${p.slug || p.id}')">
+      <div class="recent-item-img">
+        ${p.image
+          ? `<img src="${imgUrl(p.image)}" alt="${p.title}" loading="lazy">`
+          : `<div class="recent-item-img-placeholder">♥</div>`}
+      </div>
+      <div>
+        ${p.category ? `<p class="recent-item-cat">${p.category}</p>` : ''}
+        <p class="recent-item-title">${p.title}</p>
+      </div>
+    </div>
+  `).join('') : '<p style="font-size:.85rem;color:var(--text-muted);font-style:italic">Aún no hay más artículos.</p>';
+
+  const navHtml = `
+    <div class="post-nav">
+      ${prevPost
+        ? `<button class="post-nav-item" onclick="navigate('/blog/${prevPost.slug || prevPost.id}')">
+             <p class="post-nav-dir">← Anterior</p>
+             <p class="post-nav-title">${prevPost.title}</p>
+           </button>`
+        : '<div></div>'}
+      ${nextPost
+        ? `<button class="post-nav-item post-nav-next" onclick="navigate('/blog/${nextPost.slug || nextPost.id}')">
+             <p class="post-nav-dir">Siguiente →</p>
+             <p class="post-nav-title">${nextPost.title}</p>
+           </button>`
+        : '<div></div>'}
+    </div>
+  `;
+
+  document.getElementById('app').innerHTML = `
+    ${heroHtml}
+    <div class="post-layout fade-up">
+      <article class="post-article">
+        <div class="post-body">${fixBodyImages(post.body || '')}</div>
+
+        <div class="share-section">
+          <p class="share-title">Compartir este artículo</p>
+          <div class="share-buttons">
+            <a class="share-btn share-x" href="https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              X / Twitter
+            </a>
+            <a class="share-btn share-wa" href="https://api.whatsapp.com/send?text=${pageTitle}%20${pageUrl}" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+            <a class="share-btn share-fb" href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Facebook
+            </a>
+            <button class="share-btn share-copy" id="copyBtn" onclick="copyLink()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copiar enlace
+            </button>
+          </div>
+        </div>
+
+        ${navHtml}
+      </article>
+
+      <aside class="post-sidebar">
+        <div class="sidebar-section">
+          <p class="sidebar-title">Artículos recientes</p>
+          ${recentHtml}
+        </div>
+        <div class="sidebar-book-cta">
+          <p>¿Te gustó este artículo? El libro va más profundo.</p>
+          <a href="/#comprar" class="sidebar-cta-btn">Conseguir el libro</a>
+        </div>
+      </aside>
+    </div>
+  `;
+
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const btn = document.getElementById('copyBtn');
+    if (btn) { btn.textContent = '✓ Copiado'; setTimeout(() => { btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copiar enlace'; }, 2000); }
+  });
+}
+
+function renderNotFound() {
+  document.getElementById('app').innerHTML = `
+    <div style="padding-top:65px">
+      <div class="not-found"><div>
+        <h2>Artículo no encontrado</h2>
+        <p>Es posible que haya sido eliminado o el enlace sea incorrecto.</p>
+        <button class="btn-read" onclick="navigate('/blog')">← Volver al blog</button>
+      </div></div>
+    </div>
+  `;
+}
+
+function renderError(e) {
+  return `
+    <div style="padding-top:65px">
+      <div class="not-found"><div>
+        <h2>Error al cargar el blog</h2>
+        <p style="margin-bottom:1rem">No se pudo cargar el archivo de posts.</p>
+        <p style="font-size:.78rem;color:var(--sand);font-family:monospace">${e.message}</p>
+        <br>
+        <button class="btn-read" onclick="location.reload()">Reintentar</button>
+      </div></div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ROUTER
+═══════════════════════════════════════════════════════════ */
+function route() {
+  const slug = getSlug();
+  document.getElementById('app').innerHTML = `
+    <div id="pageLoading">
+      <div class="spinner"></div>
+      <p style="font-size:.8rem;color:var(--text-muted);letter-spacing:.1em">Cargando…</p>
+    </div>
+  `;
+  if (slug) {
+    showPost(slug);
+  } else {
+    showBlogList();
+  }
+}
+
+window.addEventListener('popstate', route);
+route();
+
+/* ═══════════════════════════════════════════════════════════
+   NAV MOBILE
+═══════════════════════════════════════════════════════════ */
+function toggleMenu() {
+  const nav = document.getElementById('navLinks');
+  const isOpen = nav.classList.toggle('open');
+  document.querySelector('.hamburger').setAttribute('aria-expanded', isOpen);
+}
+document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => {
+  document.getElementById('navLinks').classList.remove('open');
+}));
+document.addEventListener('click', function(e) {
+  const nav = document.getElementById('navLinks');
+  const hamburger = document.querySelector('.hamburger');
+  if (nav.classList.contains('open') && !nav.contains(e.target) && !hamburger.contains(e.target)) {
+    nav.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+});
+</script>
+</body>
+</html>
