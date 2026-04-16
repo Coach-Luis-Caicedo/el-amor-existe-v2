@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Blog El Amor Existe</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%235C3D2E'/><text y='.9em' font-size='72' x='50%' text-anchor='middle' dominant-baseline='top'>♥</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #E8DBCA; --cream-light: #F5EDE0; --warm-brown: #5C3D2E; --mid-brown: #8B5E3C;
+  --sand: #B8894A; --sand-light: #E2CBB0; --ink: #1E1209; --text-muted: #5A3F30;
+  --serif: 'Cormorant Garamond', Georgia, serif; --sans: 'Jost', sans-serif;
+  --success: #2D6A4F; --danger: #9B2335;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: #1a0f08; color: var(--ink); font-weight: 300; line-height: 1.7; min-height: 100vh; }
+
+/* LOGIN */
+#loginScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at center, #2C1810 0%, #1a0f08 100%); }
+.login-box { background: var(--cream-light); border-radius: 4px; padding: 3rem 2.5rem; width: 100%; max-width: 380px; text-align: center; border: 1px solid var(--sand-light); }
+.login-icon { font-family: var(--serif); font-size: 2.5rem; color: var(--sand); margin-bottom: .5rem; }
+.login-title { font-family: var(--serif); font-size: 1.8rem; color: var(--warm-brown); font-style: italic; font-weight: 400; margin-bottom: .3rem; }
+.login-sub { font-size: .78rem; color: var(--text-muted); letter-spacing: .08em; margin-bottom: 2rem; }
+.login-box input { width: 100%; padding: .85rem 1rem; border: 1px solid var(--sand-light); border-radius: 2px; font-family: var(--sans); font-size: .95rem; font-weight: 300; color: var(--ink); background: #fff; outline: none; transition: border-color .2s; margin-bottom: 1rem; }
+.login-box input:focus { border-color: var(--sand); }
+.login-btn { width: 100%; background: var(--warm-brown); color: #FAF7F0; border: none; padding: .85rem; font-family: var(--sans); font-size: .75rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 500; border-radius: 2px; cursor: pointer; transition: background .2s; }
+.login-btn:hover { background: var(--mid-brown); }
+.login-error { color: var(--danger); font-size: .8rem; margin-top: .8rem; display: none; }
+
+/* APP */
+#app { display: none; min-height: 100vh; background: var(--cream-light); }
+
+/* HEADER */
+.admin-header { background: var(--warm-brown); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(184,137,74,.2); }
+.admin-logo { font-family: var(--serif); font-size: 1.1rem; color: #FAF7F0; font-style: italic; }
+.admin-logo span { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--sand); margin-left: .6rem; font-family: var(--sans); font-style: normal; }
+.header-actions { display: flex; gap: .7rem; align-items: center; }
+.btn-sm { padding: .42rem 1rem; border-radius: 2px; font-family: var(--sans); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 500; cursor: pointer; border: none; transition: all .2s; }
+.btn-sand { background: var(--sand); color: #FAF7F0; }
+.btn-sand:hover { background: var(--sand-light); color: var(--warm-brown); }
+.btn-ghost { background: transparent; color: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.2); }
+.btn-ghost:hover { background: rgba(255,255,255,.1); color: #FAF7F0; }
+.btn-danger { background: var(--danger); color: #FAF7F0; }
+.btn-danger:hover { opacity: .85; }
+.btn-success { background: var(--success); color: #FAF7F0; }
+.btn-success:hover { opacity: .85; }
+.btn-outline { background: var(--cream); color: var(--text-muted); border: 1px solid var(--sand-light); }
+.btn-outline:hover { background: var(--cream-light); border-color: var(--sand); }
+
+/* TABS */
+.admin-tabs { background: var(--cream); border-bottom: 1px solid var(--sand-light); display: flex; padding: 0 2rem; overflow-x: auto; }
+.tab { padding: .9rem 1.4rem; font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; background: none; border-top: none; border-left: none; border-right: none; font-family: var(--sans); font-weight: 400; white-space: nowrap; }
+.tab:hover { color: var(--warm-brown); }
+.tab.active { color: var(--warm-brown); border-bottom-color: var(--warm-brown); }
+
+.admin-content { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* PUBLISH NOTICE */
+.publish-notice {
+  background: #1a0f08; color: var(--sand); border: 1px solid rgba(184,137,74,.3);
+  border-radius: 4px; padding: 1.2rem 1.5rem; margin-bottom: 2rem;
+  font-size: .85rem; line-height: 1.7;
+}
+.publish-notice strong { color: #FAF7F0; }
+.publish-notice code { font-family: monospace; font-size: .82rem; background: rgba(184,137,74,.15); padding: .1rem .4rem; border-radius: 2px; color: var(--sand-light); }
+
+/* EDITOR */
+.editor-grid { display: grid; grid-template-columns: 1fr 360px; gap: 2rem; align-items: start; }
+.editor-main { background: #fff; border: 1px solid var(--sand-light); border-radius: 4px; padding: 2rem; }
+.editor-sidebar { background: #fff; border: 1px solid var(--sand-light); border-radius: 4px; padding: 1.5rem; position: sticky; top: 70px; }
+.field { margin-bottom: 1.4rem; }
+.field label { display: block; font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .45rem; font-weight: 500; }
+.field input, .field textarea, .field select { width: 100%; padding: .8rem 1rem; border: 1px solid var(--sand-light); border-radius: 2px; font-family: var(--sans); font-size: .92rem; font-weight: 300; color: var(--ink); background: var(--cream-light); outline: none; transition: border-color .2s; }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--sand); background: #fff; }
+.field textarea { resize: vertical; }
+.field-hint { font-size: .7rem; color: var(--sand); margin-top: .35rem; line-height: 1.5; }
+
+/* RICH EDITOR */
+.editor-wrap { border: 1px solid var(--sand-light); border-radius: 2px; overflow: hidden; }
+.toolbar { display: flex; flex-wrap: wrap; gap: .3rem; padding: .6rem; background: var(--cream); border-bottom: 1px solid var(--sand-light); }
+.tool-btn { padding: .32rem .65rem; border-radius: 2px; font-size: .75rem; font-family: var(--sans); font-weight: 500; cursor: pointer; border: 1px solid var(--sand-light); background: #fff; color: var(--text-muted); transition: all .15s; line-height: 1.4; }
+.tool-btn:hover { background: var(--warm-brown); color: #FAF7F0; border-color: var(--warm-brown); }
+.tool-sep { width: 1px; background: var(--sand-light); margin: 0 .2rem; align-self: stretch; }
+#richEditor { min-height: 400px; padding: 1.2rem 1.4rem; outline: none; font-family: var(--serif); font-size: 1.05rem; line-height: 1.85; color: var(--ink); background: #fff; overflow-y: auto; }
+#richEditor:empty::before { content: 'Escribe el contenido del artículo aquí…'; color: var(--sand-light); pointer-events: none; }
+#richEditor h2 { font-family: var(--serif); font-size: 1.7rem; color: var(--warm-brown); margin: 1.5rem 0 .7rem; font-weight: 400; font-style: italic; }
+#richEditor h3 { font-family: var(--serif); font-size: 1.2rem; color: var(--mid-brown); margin: 1.2rem 0 .5rem; font-weight: 400; }
+#richEditor p { margin-bottom: 1rem; }
+#richEditor em { font-style: italic; color: var(--warm-brown); }
+#richEditor strong { font-weight: 600; }
+#richEditor blockquote { border-left: 3px solid var(--sand); padding: .8rem 1.2rem; margin: 1rem 0; background: rgba(184,137,74,.06); font-style: italic; color: var(--mid-brown); }
+#richEditor ul, #richEditor ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+#richEditor img { max-width: 100%; border-radius: 4px; margin: .5rem 0; }
+
+/* IMAGE FIELD */
+.img-preview { height: 140px; border-radius: 3px; overflow: hidden; background: var(--cream); border: 1px solid var(--sand-light); margin-top: .5rem; display: flex; align-items: center; justify-content: center; }
+.img-preview img { width: 100%; height: 100%; object-fit: cover; }
+.img-preview-empty { color: var(--sand-light); font-family: var(--serif); font-size: 2rem; }
+.img-hint { font-size: .72rem; color: var(--text-muted); margin-top: .4rem; line-height: 1.55; background: rgba(184,137,74,.08); border: 1px solid var(--sand-light); border-radius: 2px; padding: .6rem .8rem; }
+.img-hint code { font-family: monospace; font-size: .78rem; color: var(--warm-brown); background: rgba(184,137,74,.12); padding: .1rem .3rem; border-radius: 2px; }
+
+/* SWITCH */
+.switch-row { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; border-top: 1px solid var(--sand-light); }
+.switch-label { font-size: .78rem; color: var(--text-muted); font-weight: 400; }
+.switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; inset: 0; background: var(--sand-light); border-radius: 22px; transition: .3s; }
+.slider::before { content: ''; position: absolute; height: 16px; width: 16px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
+input:checked + .slider { background: var(--success); }
+input:checked + .slider::before { transform: translateX(18px); }
+
+/* CARD PREVIEW */
+.card-preview { background: var(--cream-light); border: 1px solid var(--sand-light); border-radius: 3px; padding: 1.2rem; margin-top: .8rem; }
+.card-preview-label { font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .7rem; }
+.prev-cat { font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: #C45A00; margin-bottom: .4rem; }
+.prev-title { font-family: var(--serif); font-style: italic; color: var(--warm-brown); font-size: 1rem; line-height: 1.35; margin-bottom: .5rem; }
+.prev-excerpt { font-size: .8rem; color: var(--text-muted); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* POSTS LIST */
+.posts-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--sand-light); border-radius: 4px; overflow: hidden; }
+.posts-table th { background: var(--cream); padding: .85rem 1rem; font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--text-muted); text-align: left; font-weight: 500; border-bottom: 1px solid var(--sand-light); }
+.posts-table td { padding: .9rem 1rem; border-bottom: 1px solid rgba(184,137,74,.1); font-size: .88rem; vertical-align: middle; }
+.posts-table tr:last-child td { border-bottom: none; }
+.posts-table tr:hover td { background: rgba(232,219,202,.25); }
+.td-title { font-family: var(--serif); font-style: italic; color: var(--warm-brown); max-width: 300px; }
+.td-actions { display: flex; gap: .4rem; flex-wrap: wrap; }
+.post-status { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; padding: .2rem .7rem; border-radius: 20px; font-weight: 500; }
+.status-published { background: rgba(45,106,79,.15); color: var(--success); }
+.status-draft { background: rgba(184,137,74,.12); color: var(--sand); }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.2rem; margin-bottom: 2rem; }
+.stat-card { background: #fff; border: 1px solid var(--sand-light); border-radius: 4px; padding: 1.8rem 1.5rem; text-align: center; }
+.stat-number { font-family: var(--serif); font-size: 3rem; color: var(--warm-brown); font-weight: 300; line-height: 1; margin-bottom: .5rem; }
+.stat-label { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-muted); }
+
+/* EXPORT SECTION */
+.export-section { background: #fff; border: 1px solid var(--sand-light); border-radius: 4px; padding: 2rem; margin-top: 1.5rem; }
+.export-title { font-family: var(--serif); font-size: 1.3rem; color: var(--warm-brown); font-style: italic; margin-bottom: .5rem; }
+.export-desc { font-size: .88rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+.export-steps { background: var(--cream-light); border: 1px solid var(--sand-light); border-radius: 3px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
+.export-steps ol { padding-left: 1.4rem; }
+.export-steps li { font-size: .88rem; color: var(--text-muted); margin-bottom: .5rem; line-height: 1.6; }
+.export-steps code { font-family: monospace; font-size: .82rem; background: rgba(184,137,74,.15); padding: .1rem .4rem; border-radius: 2px; color: var(--warm-brown); }
+.export-actions { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+
+/* EMPTY */
+.empty-list { text-align: center; padding: 4rem 2rem; background: #fff; border: 1px solid var(--sand-light); border-radius: 4px; }
+.empty-list p { font-family: var(--serif); font-style: italic; font-size: 1.2rem; color: var(--warm-brown); margin-bottom: .5rem; }
+.empty-list small { font-size: .82rem; color: var(--text-muted); }
+
+/* TOAST */
+#toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--ink); color: #FAF7F0; padding: .85rem 1.5rem; border-radius: 4px; font-size: .82rem; z-index: 999; opacity: 0; transform: translateY(10px); transition: all .25s; pointer-events: none; }
+#toast.show { opacity: 1; transform: none; }
+#toast.toast-success { background: var(--success); }
+#toast.toast-error { background: var(--danger); }
+
+/* CONFIRM DIALOG */
+.dialog-overlay { display: none; position: fixed; inset: 0; background: rgba(30,18,9,.6); z-index: 500; align-items: center; justify-content: center; }
+.dialog-overlay.open { display: flex; }
+.dialog { background: var(--cream-light); border-radius: 4px; padding: 2rem; max-width: 400px; width: 90%; border: 1px solid var(--sand-light); }
+.dialog h3 { font-family: var(--serif); font-size: 1.3rem; color: var(--warm-brown); font-style: italic; margin-bottom: .5rem; }
+.dialog p { font-size: .9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+.dialog-actions { display: flex; gap: .7rem; justify-content: flex-end; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .editor-grid { grid-template-columns: 1fr; }
+  .editor-sidebar { position: static; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 600px) {
+  .admin-content { padding: 1rem; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .td-actions { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-icon">♥</div>
+    <h1 class="login-title">El Amor Existe</h1>
+    <p class="login-sub">Panel de administración</p>
+    <input type="password" id="loginPass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <p class="login-error" id="loginError">Contraseña incorrecta</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header class="admin-header">
+    <div class="admin-logo">El Amor Existe <span>Admin</span></div>
+    <div class="header-actions">
+      <button class="btn-sm btn-sand" onclick="switchTab('write')">+ Nuevo artículo</button>
+      <button class="btn-sm btn-ghost" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <div class="admin-tabs">
+    <button class="tab active" id="tab-write" onclick="switchTab('write')">✍ Escribir</button>
+    <button class="tab" id="tab-posts" onclick="switchTab('posts')">📋 Artículos</button>
+    <button class="tab" id="tab-export" onclick="switchTab('export')">⬇ Exportar / Publicar</button>
+    <button class="tab" id="tab-stats" onclick="switchTab('stats')">📊 Estadísticas</button>
+  </div>
+
+  <div class="admin-content">
+
+    <!-- WRITE -->
+    <div class="panel active" id="panel-write">
+      <div class="publish-notice">
+        <strong>¿Cómo funciona?</strong> Escribe y guarda aquí. Cuando termines, ve a <strong>Exportar / Publicar</strong>, descarga el archivo <code>posts.json</code> y reemplázalo en tu repositorio de GitHub. Cloudflare lo desplegará automáticamente.
+      </div>
+      <div class="editor-grid">
+        <div class="editor-main">
+          <div class="field">
+            <label>Título *</label>
+            <input type="text" id="fieldTitle" placeholder="El título del artículo" oninput="updateCardPreview();autoSlug()" maxlength="120">
+          </div>
+          <div class="field">
+            <label>Extracto (resumen breve) *</label>
+            <textarea id="fieldExcerpt" placeholder="2–3 frases que aparecen en la tarjeta del blog y en SEO." rows="3" oninput="updateCardPreview()" maxlength="320"></textarea>
+          </div>
+          <div class="field">
+            <label>Cuerpo del artículo *</label>
+            <div class="editor-wrap">
+              <div class="toolbar">
+                <button class="tool-btn" title="Negrita" onclick="fmt('bold')"><b>B</b></button>
+                <button class="tool-btn" title="Cursiva" onclick="fmt('italic')"><i>I</i></button>
+                <div class="tool-sep"></div>
+                <button class="tool-btn" onclick="fmtBlock('h2')">H2</button>
+                <button class="tool-btn" onclick="fmtBlock('h3')">H3</button>
+                <button class="tool-btn" onclick="fmtBlock('p')">P</button>
+                <div class="tool-sep"></div>
+                <button class="tool-btn" onclick="fmt('insertUnorderedList')">• Lista</button>
+                <button class="tool-btn" onclick="insertBlockquote()">❝ Cita</button>
+                <button class="tool-btn" onclick="insertHR()">— Separador</button>
+                <div class="tool-sep"></div>
+                <button class="tool-btn" onclick="insertImg()">🖼 Imagen</button>
+                <button class="tool-btn" onclick="insertLink()">🔗 Enlace</button>
+              </div>
+              <div id="richEditor" contenteditable="true" spellcheck="true"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-sidebar">
+          <div class="field">
+            <label>Slug (URL) *</label>
+            <input type="text" id="fieldSlug" placeholder="mi-articulo" oninput="sanitizeSlug(this)">
+            <p class="field-hint">Solo minúsculas, números y guiones. Se genera automáticamente.</p>
+          </div>
+          <div class="field">
+            <label>Categoría</label>
+            <input type="text" id="fieldCategory" list="catList" placeholder="Filosofía, Reflexión…" oninput="updateCardPreview()">
+            <datalist id="catList">
+              <option value="Filosofía"></option>
+              <option value="Reflexión"></option>
+              <option value="Relaciones"></option>
+              <option value="Espiritualidad"></option>
+              <option value="Vida"></option>
+            </datalist>
+          </div>
+          <div class="field">
+            <label>Imagen de portada</label>
+            <input type="text" id="fieldImage" placeholder="/images/blog/mi-imagen.jpg" oninput="updateImgPreview()">
+            <div class="img-preview" id="imgPreview"><div class="img-preview-empty">♥</div></div>
+            <div class="img-hint">
+              Sube la imagen a tu repositorio en <code>/images/blog/</code> y escribe la ruta aquí.<br>
+              Ejemplo: <code>/images/blog/amor-existente.jpg</code><br>
+              La imagen debe existir en el repo antes de publicar.
+            </div>
+          </div>
+          <div class="field">
+            <label>Fecha de publicación</label>
+            <input type="date" id="fieldDate">
+          </div>
+          <div class="switch-row">
+            <span class="switch-label">Destacado (aparece primero en el blog)</span>
+            <label class="switch"><input type="checkbox" id="fieldFeatured"><span class="slider"></span></label>
+          </div>
+          <div class="switch-row">
+            <span class="switch-label">Publicado (visible en el blog)</span>
+            <label class="switch"><input type="checkbox" id="fieldPublished"><span class="slider"></span></label>
+          </div>
+          <br>
+          <button class="btn-sm btn-success" style="width:100%;padding:.8rem" onclick="savePost()">
+            Guardar artículo
+          </button>
+          <p id="editingLabel" style="font-size:.7rem;color:var(--sand);text-align:center;margin-top:.6rem;display:none"></p>
+
+          <div class="card-preview" id="cardPreview">
+            <p class="card-preview-label">Vista previa de tarjeta</p>
+            <p class="prev-cat" id="prevCat"></p>
+            <p class="prev-title" id="prevTitle">Título del artículo</p>
+            <p class="prev-excerpt" id="prevExcerpt">Aquí aparece el extracto del artículo en la tarjeta del blog.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POSTS LIST -->
+    <div class="panel" id="panel-posts">
+      <div id="postsList"></div>
+    </div>
+
+    <!-- EXPORT / PUBLISH -->
+    <div class="panel" id="panel-export">
+      <div class="export-section">
+        <h2 class="export-title">Exportar y publicar</h2>
+        <p class="export-desc">
+          Este blog funciona con un archivo <strong>posts.json</strong> en tu repositorio de GitHub. Cloudflare Pages lo sirve directamente. Para publicar cambios:
+        </p>
+        <div class="export-steps">
+          <ol>
+            <li>Haz clic en <strong>"Descargar posts.json"</strong> abajo.</li>
+            <li>Ve a tu repositorio en GitHub: <code>github.com/tu-usuario/elamorexiste</code></li>
+            <li>Navega al archivo <code>posts.json</code> en la raíz del repo.</li>
+            <li>Haz clic en ✏️ Editar → pega el contenido del archivo descargado → Commit.</li>
+            <li>Cloudflare Pages desplegará automáticamente en ~1 minuto.</li>
+          </ol>
+        </div>
+        <div class="export-actions">
+          <button class="btn-sm btn-success" style="padding:.75rem 1.5rem;font-size:.78rem" onclick="exportJSON()">
+            ⬇ Descargar posts.json
+          </button>
+          <button class="btn-sm btn-outline" style="padding:.75rem 1.5rem;font-size:.78rem" onclick="copyJSON()">
+            📋 Copiar JSON al portapapeles
+          </button>
+          <label class="btn-sm btn-outline" style="padding:.75rem 1.5rem;font-size:.78rem;cursor:pointer">
+            ⬆ Importar posts.json
+            <input type="file" accept=".json" style="display:none" onchange="importJSON(this)">
+          </label>
+        </div>
+        <br><br>
+        <p style="font-size:.8rem;color:var(--text-muted)">
+          <strong>Imágenes:</strong> Sube tus imágenes directamente al repositorio en la carpeta <code>/images/blog/</code> y referencia la ruta en el campo de imagen del artículo como <code>/images/blog/nombre-imagen.jpg</code>.
+        </p>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="panel" id="panel-stats">
+      <div class="stats-grid" id="statsGrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="dialog-overlay" id="confirmDialog">
+  <div class="dialog">
+    <h3 id="confirmTitle">Confirmar</h3>
+    <p id="confirmMsg"></p>
+    <div class="dialog-actions">
+      <button class="btn-sm btn-outline" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-sm btn-danger" id="confirmOk">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+/* ─── AUTH ───────────────────────────────────────────────── */
+// IMPORTANT: Change this password before deploying!
+// This is client-side only — the admin is NOT protected server-side.
+// For production, consider Cloudflare Access or move admin to a private device.
+const ADMIN_PASSWORD = '$El1m4rEx3st2*';
+const STORAGE_KEY = 'lcs_blog_posts_v2';
+
+function doLogin() {
+  const pass = document.getElementById('loginPass').value;
+  if (pass === ADMIN_PASSWORD) {
+    sessionStorage.setItem('lcs_auth', '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginPass').value = '';
+  }
+}
+function doLogout() {
+  sessionStorage.removeItem('lcs_auth');
+  location.reload();
+}
+
+/* ─── STORAGE ────────────────────────────────────────────── */
+function getPosts() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; }
+}
+function savePosts(posts) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+}
+
+/* ─── UTILITIES ──────────────────────────────────────────── */
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+function formatDate(d) {
+  if (!d) return '—';
+  const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const dt = new Date(d + 'T12:00:00');
+  return `${dt.getDate()} ${months[dt.getMonth()]} ${dt.getFullYear()}`;
+}
+function toSlug(str) {
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim().replace(/\s+/g, '-')
+    .replace(/-+/g, '-').slice(0, 80);
+}
+function autoSlug() {
+  const title = document.getElementById('fieldTitle').value;
+  if (!document.getElementById('fieldSlug')._manuallyEdited) {
+    document.getElementById('fieldSlug').value = toSlug(title);
+  }
+}
+function sanitizeSlug(input) {
+  input._manuallyEdited = true;
+  input.value = toSlug(input.value);
+}
+
+/* ─── EDITOR ─────────────────────────────────────────────── */
+function fmt(cmd) { document.execCommand(cmd, false, null); document.getElementById('richEditor').focus(); }
+function fmtBlock(tag) { document.execCommand('formatBlock', false, tag); document.getElementById('richEditor').focus(); }
+function insertBlockquote() { document.execCommand('formatBlock', false, 'blockquote'); document.getElementById('richEditor').focus(); }
+function insertHR() {
+  const hr = document.createElement('hr');
+  const sel = window.getSelection();
+  if (sel.rangeCount) {
+    const range = sel.getRangeAt(0);
+    range.collapse(false);
+    range.insertNode(hr);
+    range.setStartAfter(hr);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
+function insertImg() {
+  const src = prompt('Ruta de la imagen (ej: /images/blog/mi-imagen.jpg):');
+  if (src) {
+    const alt = prompt('Texto alternativo (descripción):') || '';
+    document.execCommand('insertHTML', false, `<img src="${src}" alt="${alt}">`);
+  }
+}
+function insertLink() {
+  const url = prompt('URL del enlace:');
+  if (url) {
+    const text = prompt('Texto del enlace:') || url;
+    document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" rel="noopener">${text}</a>`);
+  }
+}
+
+/* ─── CARD PREVIEW ───────────────────────────────────────── */
+function updateCardPreview() {
+  document.getElementById('prevCat').textContent = document.getElementById('fieldCategory').value || '';
+  document.getElementById('prevTitle').textContent = document.getElementById('fieldTitle').value || 'Título del artículo';
+  document.getElementById('prevExcerpt').textContent = document.getElementById('fieldExcerpt').value || 'Aquí aparece el extracto.';
+}
+function updateImgPreview() {
+  const src = document.getElementById('fieldImage').value.trim();
+  const preview = document.getElementById('imgPreview');
+  if (src) {
+    preview.innerHTML = `<img src="${src}" alt="preview" onerror="this.parentElement.innerHTML='<div class=img-preview-empty>✗ No encontrada</div>'">`;
+  } else {
+    preview.innerHTML = '<div class="img-preview-empty">♥</div>';
+  }
+}
+
+/* ─── SAVE POST ──────────────────────────────────────────── */
+let editingId = null;
+
+function savePost() {
+  const title = document.getElementById('fieldTitle').value.trim();
+  const slug = document.getElementById('fieldSlug').value.trim();
+  const excerpt = document.getElementById('fieldExcerpt').value.trim();
+  const body = document.getElementById('richEditor').innerHTML.trim();
+
+  if (!title) { toast('El título es obligatorio.', 'error'); return; }
+  if (!slug) { toast('El slug es obligatorio.', 'error'); return; }
+  if (!excerpt) { toast('El extracto es obligatorio.', 'error'); return; }
+  if (!body || body === '') { toast('El contenido no puede estar vacío.', 'error'); return; }
+
+  const posts = getPosts();
+
+  // Check slug uniqueness
+  const slugConflict = posts.find(p => p.slug === slug && p.id !== editingId);
+  if (slugConflict) { toast('Este slug ya existe. Elige otro.', 'error'); return; }
+
+  const post = {
+    id: editingId || uid(),
+    slug,
+    title,
+    excerpt,
+    body,
+    image: document.getElementById('fieldImage').value.trim(),
+    category: document.getElementById('fieldCategory').value.trim(),
+    date: document.getElementById('fieldDate').value || new Date().toISOString().split('T')[0],
+    published: document.getElementById('fieldPublished').checked,
+    featured: document.getElementById('fieldFeatured').checked,
+  };
+
+  if (editingId) {
+    const idx = posts.findIndex(p => p.id === editingId);
+    posts[idx] = post;
+    toast('✓ Artículo actualizado.');
+  } else {
+    posts.unshift(post);
+    toast(post.published ? '✓ Artículo guardado y listo para publicar.' : '✓ Borrador guardado.');
+  }
+
+  savePosts(posts);
+  resetEditor();
+  renderStats();
+}
+
+function resetEditor() {
+  editingId = null;
+  document.getElementById('fieldTitle').value = '';
+  document.getElementById('fieldSlug').value = '';
+  document.getElementById('fieldSlug')._manuallyEdited = false;
+  document.getElementById('fieldExcerpt').value = '';
+  document.getElementById('richEditor').innerHTML = '';
+  document.getElementById('fieldImage').value = '';
+  document.getElementById('fieldCategory').value = '';
+  document.getElementById('fieldDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('fieldPublished').checked = false;
+  document.getElementById('fieldFeatured').checked = false;
+  document.getElementById('editingLabel').style.display = 'none';
+  updateCardPreview();
+  updateImgPreview();
+}
+
+function editPost(id) {
+  const post = getPosts().find(p => p.id === id);
+  if (!post) return;
+  editingId = id;
+  document.getElementById('fieldTitle').value = post.title;
+  document.getElementById('fieldSlug').value = post.slug || '';
+  document.getElementById('fieldSlug')._manuallyEdited = true;
+  document.getElementById('fieldExcerpt').value = post.excerpt || '';
+  document.getElementById('richEditor').innerHTML = post.body || '';
+  document.getElementById('fieldImage').value = post.image || '';
+  document.getElementById('fieldCategory').value = post.category || '';
+  document.getElementById('fieldDate').value = post.date || '';
+  document.getElementById('fieldPublished').checked = !!post.published;
+  document.getElementById('fieldFeatured').checked = !!post.featured;
+  const label = document.getElementById('editingLabel');
+  label.style.display = 'block';
+  label.textContent = `Editando: "${post.title.slice(0, 40)}"`;
+  updateCardPreview();
+  updateImgPreview();
+  switchTab('write');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ─── POSTS LIST ─────────────────────────────────────────── */
+function renderPostsList() {
+  const posts = getPosts().sort((a, b) => new Date(b.date) - new Date(a.date));
+  const el = document.getElementById('postsList');
+  if (!posts.length) {
+    el.innerHTML = '<div class="empty-list"><p>No hay artículos todavía.</p><small>Escribe tu primer artículo en la pestaña "Escribir".</small></div>';
+    return;
+  }
+  el.innerHTML = `
+    <table class="posts-table">
+      <thead><tr><th>Título</th><th>Categoría</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <tbody>${posts.map(p => `<tr>
+        <td class="td-title">${p.title}</td>
+        <td style="font-size:.78rem;color:var(--text-muted)">${p.category || '—'}</td>
+        <td style="font-size:.78rem;color:var(--sand);white-space:nowrap">${formatDate(p.date)}</td>
+        <td><span class="post-status ${p.published ? 'status-published' : 'status-draft'}">${p.published ? 'Publicado' : 'Borrador'}</span></td>
+        <td><div class="td-actions">
+          <button class="btn-sm btn-outline" onclick="editPost('${p.id}')">Editar</button>
+          <button class="btn-sm btn-danger" onclick="confirmDelete('${p.id}','${p.title.replace(/'/g, "\\'").slice(0,40)}')">Eliminar</button>
+        </div></td>
+      </tr>`).join('')}</tbody>
+    </table>
+  `;
+}
+
+/* ─── STATS ──────────────────────────────────────────────── */
+function renderStats() {
+  const posts = getPosts();
+  const pub = posts.filter(p => p.published);
+  const cats = {};
+  pub.forEach(p => { cats[p.category] = (cats[p.category] || 0) + 1; });
+  const top = Object.entries(cats).sort((a, b) => b[1] - a[1])[0];
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card"><div class="stat-number">${posts.length}</div><div class="stat-label">Total artículos</div></div>
+    <div class="stat-card"><div class="stat-number">${pub.length}</div><div class="stat-label">Publicados</div></div>
+    <div class="stat-card"><div class="stat-number">${posts.length - pub.length}</div><div class="stat-label">Borradores</div></div>
+    <div class="stat-card"><div class="stat-number" style="font-size:.95rem;padding-top:.5rem">${top ? top[0] : '—'}</div><div class="stat-label">Categoría más activa</div></div>
+  `;
+}
+
+/* ─── EXPORT / IMPORT ────────────────────────────────────── */
+function exportJSON() {
+  const posts = getPosts();
+  const json = JSON.stringify(posts, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'posts.json';
+  a.click();
+  toast('✓ posts.json descargado. Súbelo a GitHub.');
+}
+async function copyJSON() {
+  const json = JSON.stringify(getPosts(), null, 2);
+  await navigator.clipboard.writeText(json);
+  toast('✓ JSON copiado al portapapeles.');
+}
+function importJSON(input) {
+  const r = new FileReader();
+  r.onload = e => {
+    try {
+      const imp = JSON.parse(e.target.result);
+      if (!Array.isArray(imp)) throw new Error('No es un array');
+      const ex = getPosts();
+      const ids = new Set(ex.map(p => p.id));
+      let n = 0;
+      imp.forEach(p => {
+        if (!ids.has(p.id)) { ex.push(p); n++; }
+        else {
+          // Update existing
+          const idx = ex.findIndex(e => e.id === p.id);
+          ex[idx] = p;
+        }
+      });
+      savePosts(imp); // Replace all with imported
+      toast(`✓ ${imp.length} posts importados correctamente.`, 'success');
+      renderPostsList();
+      renderStats();
+    } catch (err) {
+      toast('Error al leer el archivo JSON: ' + err.message, 'error');
+    }
+    input.value = '';
+  };
+  r.readAsText(input.files[0]);
+}
+
+/* ─── CONFIRM ────────────────────────────────────────────── */
+function confirmDelete(id, title) {
+  document.getElementById('confirmTitle').textContent = 'Eliminar artículo';
+  document.getElementById('confirmMsg').textContent = `¿Seguro que quieres eliminar "${title}"? Esta acción no se puede deshacer.`;
+  document.getElementById('confirmOk').onclick = () => { closeConfirm(); deletePost(id); };
+  document.getElementById('confirmDialog').classList.add('open');
+}
+function closeConfirm() { document.getElementById('confirmDialog').classList.remove('open'); }
+function deletePost(id) {
+  savePosts(getPosts().filter(p => p.id !== id));
+  renderPostsList();
+  renderStats();
+  toast('Artículo eliminado.');
+}
+
+/* ─── TABS ───────────────────────────────────────────────── */
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+  if (name === 'posts') renderPostsList();
+  if (name === 'stats') renderStats();
+}
+
+/* ─── TOAST ──────────────────────────────────────────────── */
+let _tt;
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show' + (type ? ' toast-' + type : '');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => el.className = '', 3200);
+}
+
+/* ─── INIT ───────────────────────────────────────────────── */
+function initApp() {
+  document.getElementById('fieldDate').value = new Date().toISOString().split('T')[0];
+  updateCardPreview();
+  renderStats();
+
+  // Load posts.json from site if localStorage is empty (first time)
+  if (getPosts().length === 0) {
+    fetch('/posts.json')
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          savePosts(data);
+          toast('✓ Posts cargados desde posts.json del sitio.');
+          renderStats();
+        }
+      })
+      .catch(() => { /* If it fails, start fresh */ });
+  }
+}
+
+// Auto-login from session
+if (sessionStorage.getItem('lcs_auth') === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  initApp();
+}
+
+// Enter on password field
+document.getElementById('loginPass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+</script>
+</body>
+</html>
