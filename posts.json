@@ -1,0 +1,26 @@
+[
+  {
+    "id": "001",
+    "slug": "el-amor-no-es-un-sentimiento",
+    "title": "El amor no es un sentimiento",
+    "excerpt": "Desde niños nos enseñaron que el amor es algo que se siente. Pero si el amor fuera solo un sentimiento, desaparecería en cuanto dejáramos de sentirlo. Y sin embargo, hay personas que eligen quedarse cuando el sentimiento se apaga.",
+    "body": "<p>Desde niños nos enseñaron que el amor es algo que se siente. Una emoción. Un estado del corazón. Pero si el amor fuera solo un sentimiento, desaparecería en cuanto dejáramos de sentirlo.</p><p>Y sin embargo, hay personas que eligen quedarse cuando el sentimiento se apaga. Que cuidan cuando no tienen ganas de cuidar. Que vuelven cuando todo les dice que huyan.</p><h2>¿Qué es entonces el amor?</h2><p>El amor es una <em>postura</em>. Una decisión que se renueva cada día. No un estado que nos invade, sino una dirección que elegimos.</p><blockquote><p>El sentimiento del amor es la señal. El amor mismo es la respuesta que damos a esa señal.</p></blockquote><p>Esta distinción cambia todo. Porque si el amor es solo un sentimiento, entonces cuando se va, ya no hay nada que hacer. Pero si el amor es una postura, entonces la pregunta cambia: ¿qué postura quiero tomar hoy?</p>",
+    "image": "images/blog/amor-sentimiento.jpg",
+    "category": "Filosofía",
+    "date": "2025-03-15",
+    "published": true,
+    "featured": true
+  },
+  {
+    "id": "002",
+    "slug": "la-tension-de-amar",
+    "title": "La tensión de amar",
+    "excerpt": "El amor genuino contiene una paradoja irreducible: nos expone completamente y sin garantías. Entender esa tensión es el primer paso para vivirla sin huir.",
+    "body": "<p>Amar es exponerse. Y eso aterra. Porque cuando amamos de verdad, entregamos algo que no podemos recuperar intacto: nuestra vulnerabilidad.</p><p>La tensión no es un defecto del amor. Es su estructura misma. El amor que no tensiona no es amor: es comodidad, costumbre, o miedo a la soledad disfrazado de afecto.</p><h2>Dos respuestas a la tensión</h2><p>Ante la tensión del amor, hay dos respuestas habituales. La primera es huir: construir paredes, no comprometerse, quedarse siempre a medio camino. La segunda es rendirse: perder la propia identidad en el otro, disolver el yo en la relación.</p><p>Ambas son evasiones. El camino real pasa por otra cosa: <em>sostener la tensión sin resolverla prematuramente</em>.</p>",
+    "image": "images/blog/tension-amar.jpg",
+    "category": "Reflexión",
+    "date": "2025-04-02",
+    "published": true,
+    "featured": false
+  }
+]
