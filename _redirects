@@ -1,0 +1,5 @@
+# Cloudflare Pages — Redirects & Rewrites
+# Blog post URLs → blog.html
+/blog/*   /blog.html   200
+# Catch-all SPA fallback
+/*        /index.html  404
